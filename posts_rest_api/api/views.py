@@ -1,5 +1,6 @@
 import requests
 
+from requests.exceptions import JSONDecodeError
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -50,11 +51,34 @@ class PostDetail(APIView):
             raise Http404
 
     def get(self, request, pk, format=None):
-        post = self.get_object(pk)
-        serializer = PostSerializer(post)
-        return Response(serializer.data)
+        try:
+            post = self.get_object(pk)
+            serializer = PostSerializer(post)
+            return Response(serializer.data)
+        except Http404:
+            # we can try to get it from external API
+            post = self._get_from_external(pk)
+            # and save it
+            serializer = PostSerializer(data=post)
+            if serializer.is_valid():
+                serializer.save(pk=pk)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            raise Http404
 
-    # TODO we dont want put, just patch
+    def _get_from_external(self, pk):
+            response = requests.get(f"{POSTS_API_ENDPOINT}/{pk}" , timeout=5)
+            if not response.status_code == 200:
+                # doesn't exist at the external api, raise 404
+                raise Http404
+            # we are assuming here this will work - should catch errors...
+            try:
+                post = response.json()
+                return post
+            except JSONDecodeError:
+                raise Http404
+            
+
+    # we dont want put, just patch
     # def put(self, request, pk, format=None):
     #     post = self.get_object(pk)
     #     serializer = PostSerializer(post, data=request.data)
@@ -84,7 +108,6 @@ class PostUserDetail(APIView):
     """ Get all posts by userId """
 
     def get(self, request, userId, format=None):
-        # BUG returns [] for non existing user
         # TODO clarify if we should validate userId in external API here as well
         posts = Post.objects.filter(userId=userId)
         if posts.exists():
