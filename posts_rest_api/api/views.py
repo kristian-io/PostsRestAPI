@@ -66,17 +66,16 @@ class PostDetail(APIView):
             raise Http404
 
     def _get_from_external(self, pk):
-            response = requests.get(f"{POSTS_API_ENDPOINT}/{pk}" , timeout=5)
-            if not response.status_code == 200:
-                # doesn't exist at the external api, raise 404
-                raise Http404
-            # we are assuming here this will work - should catch errors...
-            try:
-                post = response.json()
-                return post
-            except JSONDecodeError:
-                raise Http404
-            
+        response = requests.get(f"{POSTS_API_ENDPOINT}/{pk}", timeout=5)
+        if not response.status_code == 200:
+            # doesn't exist at the external api, raise 404
+            raise Http404
+        # we are assuming here this will work - should catch errors...
+        try:
+            post = response.json()
+            return post
+        except JSONDecodeError:
+            raise Http404
 
     # we dont want put, just patch
     # def put(self, request, pk, format=None):
