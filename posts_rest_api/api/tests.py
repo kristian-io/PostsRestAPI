@@ -1,4 +1,4 @@
-import json
+import requests
 
 from django.test import TestCase
 from django.test import Client
@@ -9,6 +9,8 @@ from api.models import Post
 # this should be refactored as currently changing `POSTS` or `new_post` might break things.
 
 ENDPOINT = "/api/v1/posts"
+
+EXTERNAL_POSTS_API_ENDPOINT = "https://jsonplaceholder.typicode.com/posts"
 
 c = Client()
 
@@ -54,7 +56,6 @@ class GetTestCases(DefaultSetupTestCase):
             self.assertEqual(post["title"], POSTS[i]["title"])
             self.assertEqual(post["body"], POSTS[i]["body"])
 
-
     def test_get_post_by_int_id(self):
         # hardcoded id, id = 1 is the first post added in the setUp() (that is POSTS[0])
         id = 1
@@ -71,10 +72,21 @@ class GetTestCases(DefaultSetupTestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_get_post_by_id_does_not_exist(self):
-        # trying to get post by id which is not integer
+        # trying to get post by id which does not exist ( id = 0 wont be in the db or at the external endpoint)
         response = c.get(f"{ENDPOINT}/0")
         self.assertEqual(response.status_code, 404)
-        
+
+    def test_get_post_by_id_external(self):
+        # trying to get post by id which only exists at the external endpoint
+        response = c.get(f"{ENDPOINT}/50")
+        response_from_external_api = requests.get(
+            f"{EXTERNAL_POSTS_API_ENDPOINT}/50")
+        our_data = response.json()
+        external_data = response_from_external_api.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(our_data, external_data)
+
     def test_get_posts_by_user(self):
         id = 1
         response = c.get(f"{ENDPOINT}/user/{id}")
@@ -85,7 +97,6 @@ class GetTestCases(DefaultSetupTestCase):
         id = 5
         response = c.get(f"{ENDPOINT}/user/{id}")
         self.assertEqual(response.status_code, 404)
-
 
 
 class PostTestCases(DefaultSetupTestCase):
@@ -131,9 +142,9 @@ class PatchTestCases(DefaultSetupTestCase):
         # hardcoded id, id = 1 is the first post added in the setUp() (that is POSTS[0])
         id = 1
         data = {"title": "updated title"}
-        
-        
-        response = c.patch(f"{ENDPOINT}/{id}", data=data, content_type='application/json')
+
+        response = c.patch(f"{ENDPOINT}/{id}", data=data,
+                           content_type='application/json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["title"], data["title"])
 
@@ -141,7 +152,8 @@ class PatchTestCases(DefaultSetupTestCase):
         id = 1
         partial_post = {"body": "updated body"}
 
-        response = c.patch(f"{ENDPOINT}/{id}", data=partial_post, content_type='application/json')
+        response = c.patch(
+            f"{ENDPOINT}/{id}", data=partial_post, content_type='application/json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["body"], partial_post["body"])
 
@@ -152,7 +164,8 @@ class PatchTestCases(DefaultSetupTestCase):
             "title": "updated title xyz"
         }
 
-        response = c.patch(f"{ENDPOINT}/{id}", data=partial_post, content_type='application/json')
+        response = c.patch(
+            f"{ENDPOINT}/{id}", data=partial_post, content_type='application/json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["body"], partial_post["body"])
         self.assertEqual(response.json()["title"], partial_post["title"])
