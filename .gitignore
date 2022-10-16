@@ -1,1 +1,3 @@
 __pycache__/
+.vscode/
+posts_rest_api/db.sqlite3
