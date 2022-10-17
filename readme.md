@@ -24,13 +24,13 @@ Then
 ```python manage.py runserver```
 
 Development server will be served at:
-<http://127.0.0.1:8000/> which will redirect you to the documentation.
+[`http://127.0.0.1:8000/`](http://127.0.0.1:8000/) which will redirect you to the documentation.
 
 
 ### Documentation (WIP)
 
-Docs : <http://127.0.0.1:8000/api/v1/docs>
-Schema: <http://127.0.0.1:8000/api/v1/schema>
+Docs : [`http://127.0.0.1:8000/api/v1/docs`](http://127.0.0.1:8000/api/v1/docs)
+Schema: [`http://127.0.0.1:8000/api/v1/schema`](http://127.0.0.1:8000/api/v1/schema)
 
 
 #### Endpoints
