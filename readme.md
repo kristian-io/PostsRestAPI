@@ -4,7 +4,7 @@ Restful API in Python which handles basic CRUD operations for managing user "pos
 
 Implemented with Django and django-rest-framework.
 
-### Installation
+# Installation
 
 ```
 git clone https://github.com/kristian-io/PostsRestAPI.git
@@ -27,22 +27,31 @@ Development server will be served at:
 [`http://127.0.0.1:8000/`](http://127.0.0.1:8000/) which will redirect you to the documentation.
 
 
-### Documentation (WIP)
+# Documentation 
 
 Docs : [`http://127.0.0.1:8000/api/v1/docs`](http://127.0.0.1:8000/api/v1/docs)
+
 Schema: [`http://127.0.0.1:8000/api/v1/schema`](http://127.0.0.1:8000/api/v1/schema)
 
 
-#### Endpoints
+## Endpoints
+
+These endpoints are also browser accessible to interact with (when the server is running).
 
 
+- **GET** [`/api/v1/posts`](http://127.0.0.1:8000/api/v1/posts)
 
-**GET** [`/api/v1/posts`](http://127.0.0.1:8000/api/v1/posts)
-
-**GET** | **PATCH** | **DELETE** [`/api/v1/posts/{id}`](http://127.0.0.1:8000/api/v1/posts/{id})
-
+- **GET** | **PATCH** | **DELETE** [`/api/v1/posts/{id}`](http://127.0.0.1:8000/api/v1/posts/{id})
 
 
-**POST** [`/api/v1/posts`](http://127.0.0.1:8000/api/v1/posts)
+- **POST** [`/api/v1/posts`](http://127.0.0.1:8000/api/v1/posts) 
 
-**GET** [`/api/v1/posts/user/{userId}`](http://127.0.0.1:8000/api/v1/posts/user/{userId})
+- **GET** [`/api/v1/posts/user/{userId}`](http://127.0.0.1:8000/api/v1/posts/user/{userId})
+
+
+# Todo/Backlog
+
+- Fix docs for POST endpoint (currently does not allow POSTing data (schema issues))
+- Implement frontend to interact with the API
+- Docker container
+- Prod server setup
