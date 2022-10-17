@@ -9,7 +9,7 @@ Implemented with Django and django-rest-framework.
 ```
 git clone https://github.com/kristian-io/PostsRestAPI.git
 cd PostsRestAPI
-conda create --name post-api python=3.10
+conda create --name post-api python=3.10 -y
 conda activate post-api
 pip install -r requirements.txt
 cd posts_rest_api
