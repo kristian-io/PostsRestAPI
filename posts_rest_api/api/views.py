@@ -16,15 +16,61 @@ POSTS_API_ENDPOINT = "https://jsonplaceholder.typicode.com/posts"
 
 
 class PostList(APIView):
-    """ List all posts or create a new one. """
+    """
+    # GET [`/api/v1/posts`](/api/v1/posts)
 
-    # we could remove this method, as it was not required but its useful during dev...
+    ## Response body
+
+    ```
+    [
+        {
+            "userId" : 1,
+            "title" : "Hello World",
+            "body" : "This is my first entry"
+        },
+        {
+            "userId" : 2,
+            "title" : "Welcome to my blog post",
+            "body" : "Some text..."
+        }
+    ]
+    ```
+
+    # POST [`/api/v1/posts`](/api/v1/posts)
+
+    ## Request body
+
+    ```
+    {
+        "userId" : 1,
+        "title" : "Hello World",
+        "body" : "This is my first entry"
+    }
+    ```
+
+    """
+
+    # we could remove this method as it was not required but its useful during dev...
     def get(self, request, format=None):
+        """
+        GET all the posts. 
+        """
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        """Create new post.
+
+        Request body:
+            {
+                "userId" : 1,
+                "title" : "Title of the post",
+                "body" : "Body of the post"
+            }
+
+        """
+
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
             userId = serializer.validated_data["userId"]
@@ -42,8 +88,9 @@ class PostList(APIView):
 
 
 class PostDetail(APIView):
-    """ Retrieve, update a post instance. """
+    """Implemets GET (custom), PATCH, DELETE
 
+    """
     def get_object(self, pk):
         try:
             return Post.objects.get(pk=pk)
@@ -51,6 +98,11 @@ class PostDetail(APIView):
             raise Http404
 
     def get(self, request, pk, format=None):
+        """GET post by id.
+
+        If the post is not available in the backend we will try to fetch it from external API (and save on our end).
+
+        """
         try:
             post = self.get_object(pk)
             serializer = PostSerializer(post)
@@ -60,7 +112,7 @@ class PostDetail(APIView):
             post = self._get_from_external(pk)
             # and save it
             serializer = PostSerializer(data=post)
-            if serializer.is_valid():
+            if serializer.is_valid(): 
                 serializer.save(pk=pk)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             raise Http404
@@ -104,7 +156,7 @@ class PostDetail(APIView):
 
 
 class PostUserDetail(APIView):
-    """ Get all posts by userId """
+    """ Get all posts by userId. """
 
     def get(self, request, userId, format=None):
         # TODO clarify if we should validate userId in external API here as well
