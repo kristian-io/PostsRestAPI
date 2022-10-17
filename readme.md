@@ -18,8 +18,31 @@ python manage.py migrate
 ```
 
 We can first run some tests
-`python manage.py test`
+```python manage.py test```
 
 Then
-`python manage.py runserver
-`
+```python manage.py runserver```
+
+Development server will be served at:
+<http://127.0.0.1:8000/> which will redirect you to the documentation.
+
+
+### Documentation (WIP)
+
+Docs : <http://127.0.0.1:8000/api/v1/docs>
+Schema: <http://127.0.0.1:8000/api/v1/schema>
+
+
+#### Endpoints
+
+
+
+**GET** [`/api/v1/posts`](http://127.0.0.1:8000/api/v1/posts)
+
+**GET** | **PATCH** | **DELETE** [`/api/v1/posts/{id}`](http://127.0.0.1:8000/api/v1/posts/{id})
+
+
+
+**POST** [`/api/v1/posts`](http://127.0.0.1:8000/api/v1/posts)
+
+**GET** [`/api/v1/posts/user/{userId}`](http://127.0.0.1:8000/api/v1/posts/user/{userId})
