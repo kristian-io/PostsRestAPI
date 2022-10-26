@@ -60,11 +60,11 @@ function ContentInput({ label = null }) {
 function SaveButton() {
 
   return (
-    <Button 
+    <Button
       variant="contained"
       sx={{
         justifySelf: 'center'
-      }}  
+      }}
     >Save
     </Button>
   )
@@ -101,7 +101,7 @@ function PostContainer() {
             label="Content">
           </ContentInput>
 
-        <SaveButton />
+          <SaveButton />
         </Box>
       </Container>
     </div>
