@@ -6,7 +6,11 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 
+
 import './App.css';
+
+const axios = require('axios').default;
+
 
 const darkTheme = createTheme({
   palette: {
@@ -16,33 +20,40 @@ const darkTheme = createTheme({
 });
 
 
-function UserInput({ value = null, label = null }) {
+const API_ENDPOINT = 'http://127.0.0.1:8000/api/v1/posts';
+
+
+function UserInput({ value, label = null, onChange }) {
   return (
     <TextField
       id="outlined-basic"
       label={label}
       variant="outlined"
-      value={value}
-    // helperText="User ID"
+      value={value.userId}
+      name="userId"
+      // helperText="User ID"
+      onChange={onChange}
     />
   )
 }
 
-function TitleInput({ value = null, label = null }) {
+function TitleInput({ value = null, label = null, onChange }) {
   return (
     <TextField
       id="outlined-multiline-static"
       label={label}
-      value={value}
+      value={value.title}
+      name="title"
       fullWidth
-    // helperText="Title of your post"
-    // defaultValue="Title of your post."
+      // helperText="Title of your post"
+      // defaultValue="Title of your post."
+      onChange={onChange}
     />
   )
 }
 
 
-function ContentInput({ label = null }) {
+function ContentInput({ value, label = null, onChange }) {
   return (
     <TextField
       id="outlined-multiline-static margin-normal"
@@ -50,28 +61,87 @@ function ContentInput({ label = null }) {
       multiline
       rows={4}
       fullWidth
+      value={value.body}
+      name="body"
       // defaultValue="Write your post text here."
       helperText="Write your post :) "
+      onChange={onChange}
     />
   )
 }
 
 
-function SaveButton() {
-
+function SaveButton({ onClick }) {
+  const [props, setProps] = useState({
+    message: "Save",
+    extraMessage: "",
+    color: "success"
+  })
   return (
-    <Button
-      variant="contained"
-      sx={{
-        justifySelf: 'center'
-      }}
-    >Save
-    </Button>
+    <>
+      <Button
+        color={props.color}
+        variant="contained"
+        sx={{
+          justifySelf: 'center'
+        }}
+        onClick={onClick}
+        value="haha"
+      >{props.message}
+      </Button>
+      {props.extraMessage && 
+        <p
+          sx={{
+            justifyContent: 'center'
+          }}
+        >
+          {props.extraMessage}
+        </p>}
+    </>
   )
 }
 
 
-function PostContainer() {
+function CreatePost() {
+  const [formData, setFormData] = useState({
+    userId: '',
+    title: '',
+    body: ''
+  });
+
+  function handleFormChange(event) {
+    // console.log('change happened.')
+    // console.log(event.target.name, event.target.value)
+
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value
+    })
+  }
+
+
+  function postData() {
+    // console.log('here!!!! ')
+    // console.log(formData)
+
+    axios.post(API_ENDPOINT, formData)
+      .then((response) => {
+        // handle success
+        console.log(response.status);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        // handle error
+        console.log(error);
+      })
+      .finally(() => {
+        console.log('done...');
+      });
+
+  };
+
+
+
   return (
     <div className="post_container">
       <Container
@@ -89,19 +159,28 @@ function PostContainer() {
         >
           <UserInput
             label="User ID"
+            onChange={handleFormChange}
+            value={formData.userId}
           >
           </UserInput>
           {/* <hr/> */}
           <TitleInput
             label="Title"
+            onChange={handleFormChange}
+            value={formData.title}
           >
           </TitleInput>
           {/* <hr/> */}
           <ContentInput
-            label="Content">
+            label="Content"
+            onChange={handleFormChange}
+            value={formData.body}
+          >
           </ContentInput>
 
-          <SaveButton />
+          <SaveButton
+            onClick={postData}
+          />
         </Box>
       </Container>
     </div>
@@ -113,7 +192,7 @@ function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <PostContainer />
+      <CreatePost />
     </ThemeProvider>
   );
 }

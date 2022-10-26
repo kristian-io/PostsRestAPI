@@ -1,3 +1,7 @@
 __pycache__/
 .vscode/
 posts_rest_api/db.sqlite3
+.coverage
+posts_rest_api/.coverage
+posts_rest_api/coverage.xml
+task.md
