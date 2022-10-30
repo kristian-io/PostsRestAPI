@@ -16,7 +16,6 @@ const API_ENDPOINT = 'http://127.0.0.1:8000/api/v1/posts';
 function UserInput({ value, label = null, onChange }) {
   return (
     <TextField
-      id="outlined-basic"
       label={label}
       variant="outlined"
       value={value.userId}
@@ -142,9 +141,7 @@ export function CreatePost() {
   return (
     <div className="post_container">
       <Container
-        sx={{
-          maxWidth: '70%'
-        }}>
+        maxWidth="sm">
         <h1> Create a new post</h1>
         <Box
           component="form"
