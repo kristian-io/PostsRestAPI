@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 
 import './styles.css'
 import { Post } from '../Post/Post';
@@ -56,36 +57,35 @@ export function GetPost() {
 
     return (
         <>
-            <Container
-                maxWidth="sm">
+            <Container maxWidth="sm">
                 {/* <h2>Get post by ID</h2> */}
                 <form name="getPostForm" onSubmit={handleSubmit}>
-                    <TextField
-                        variant="outlined"
-                        onChange={onChange}
-                        name="getPost"
-                        value={postID}
-                        // id="standard-basic" 
-                        label="Get Post by ID"
-                    />
-                    <Button
-                        size="small"
-                        variant="contained"
-                        sx={{
-                            justifySelf: 'center'
-                        }}
-                        onClick={handleSubmit}> Get
-                    </Button>
+                    <Grid container justify="space-between" alignItems="center" spacing={1}>
+                        <Grid item xs={6} >
+                            <TextField
+                                variant="outlined"
+                                onChange={onChange}
+                                name="getPost"
+                                value={postID}
+                                // id="standard-basic" 
+                                label="Get Post by ID"
+                            />
+                        </Grid>
+                        <Grid item xs={6} >
+                            <Button
+                                size="large"
+                                variant="contained"
+                                sx={{
+                                    justifySelf: 'center'
+                                }}
+                                onClick={handleSubmit}> Get
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </form>
                 <Paper
                     elevation={1} >
-                    {/* {postData.id && <Box>
-                            <h3>{postData.title}</h3>
-                            <h4>userId: {postData.userId}</h4>
-                            <h5>post Id: {postData.id}</h5>
-                            <h5>{postData.body}</h5>
-                        </Box>} */}
-                    {postData.id &&<Post userId={postData.userId} id={postData.id} title={postData.title} body={postData.body} />}
+                    {postData.id && <Post userId={postData.userId} id={postData.id} title={postData.title} body={postData.body} />}
                 </Paper>
                 {!postData.exists && <h3>Not found</h3>}
             </Container>
