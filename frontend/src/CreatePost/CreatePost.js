@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Alert from '@mui/material/Alert';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 
+import { Post } from '../Post/Post'
+
+import './styles.css'
+import { Collapse } from '@mui/material';
 
 const axios = require('axios').default;
 
@@ -13,12 +18,13 @@ const axios = require('axios').default;
 const API_ENDPOINT = 'http://127.0.0.1:8000/api/v1/posts';
 
 
-function UserInput({ value, label = null, onChange }) {
+function UserInput({ formData, label = null, onChange }) {
   return (
     <TextField
+      required
       label={label}
       variant="outlined"
-      value={value.userId}
+      value={formData.userId}
       name="userId"
       // helperText="User ID"
       onChange={onChange}
@@ -26,12 +32,12 @@ function UserInput({ value, label = null, onChange }) {
   )
 }
 
-function TitleInput({ value = null, label = null, onChange }) {
+function TitleInput({ formData, label = null, onChange }) {
   return (
     <TextField
-      id="outlined-multiline-static"
+      required
       label={label}
-      value={value.title}
+      value={formData.title}
       name="title"
       fullWidth
       // helperText="Title of your post"
@@ -41,16 +47,15 @@ function TitleInput({ value = null, label = null, onChange }) {
   )
 }
 
-
-function ContentInput({ value, label = null, onChange }) {
+function ContentInput({ formData, label = null, onChange }) {
   return (
     <TextField
-      id="outlined-multiline-static margin-normal"
+      required
       label={label}
       multiline
-      rows={4}
+      rows={8}
       fullWidth
-      value={value.body}
+      value={formData.body}
       name="body"
       // defaultValue="Write your post text here."
       helperText="Write your post :) "
@@ -59,47 +64,62 @@ function ContentInput({ value, label = null, onChange }) {
   )
 }
 
+function SaveButton({ onClick, validateData, clearForm, setError }) {
 
-function SaveButton({ onClick }) {
-  const [buttonState, setButtonState] = useState({
-    message: "Save",
-    extraMessage: "Post saved successfully",
-    alertOn: false,
-    color: "success"
-  })
   return (
-    <>
-      <Button
-        color={buttonState.color}
-        variant="contained"
-        sx={{
-          justifySelf: 'center'
+
+    <Button color="primary" variant="contained"
+      sx={{
+        justifySelf: 'center'
+      }}
+
+      onClick={() => {
+        if (validateData()) {
+          onClick()
+          clearForm()
+        }
+        else {
+          console.error('no data in the form')
+          setError({
+            message: "All fields are required!",
+            severity: "error",
+            active: true
+          })
+        }
+      }}>
+      Save
+    </Button>
+
+  )
+}
+
+function AlertMessage({ error }) {
+
+  const [open, setOpen] = React.useState(true);
+
+  useEffect(() => {
+    if (error.active) {
+      setOpen(true)
+    }
+    else {
+      setOpen(false)
+    }
+  }, [error])
+
+  return (
+    <Collapse in={open} >
+      <Alert
+        severity={error.severity}
+        onClose={() => {
+          console.log("clicked")
+          setOpen(!open)
         }}
         onClick={() => {
-          setButtonState(
-            {
-              ...buttonState,
-              alertOn: true
-            })
-          onClick()
-        }
-        }
-        value="haha"
-      >{buttonState.message}
-      </Button>
-      {buttonState.alertOn &&
-        <Alert
-          onClose={() => { }}
-          onClick={() => {
-            setButtonState({
-              ...buttonState,
-              alertOn: false,
-            })
-          }}
-        >
-          {buttonState.extraMessage}
-        </Alert>}
-    </>
+          setOpen(!open)
+        }}>
+        {error.message}
+      </Alert>
+    </Collapse >
   )
 }
 
@@ -110,8 +130,16 @@ export function CreatePost() {
     body: ''
   });
 
+  const [post, setPost] = useState({
+  })
+
+  const [error, setError] = useState({
+    message: "",
+    status: null
+  })
+
   function handleFormChange(event) {
-    // console.log(event.target.name, event.target.value)
+    console.log(event.target.name, event.target.value)
 
     setFormData({
       ...formData,
@@ -119,13 +147,34 @@ export function CreatePost() {
     })
   }
 
+  function validateData() {
+    if (formData.userId && formData.title && formData.body) return true
+    return false
+  }
+
+  function clearForm() {
+    setFormData({
+      ...formData,
+      userId: '',
+      title: '',
+      body: ''
+    })
+
+  }
 
   function postData() {
-
     axios.post(API_ENDPOINT, formData)
       .then((response) => {
         console.log(response.status);
         console.log(response.data);
+
+        setPost(response.data)
+        setFormData({
+          ...formData,
+          userId: '',
+          title: '',
+          body: ''
+        })
       })
       .catch((error) => {
         console.log(error);
@@ -133,51 +182,31 @@ export function CreatePost() {
       .finally(() => {
         console.log('done...');
       });
-
   };
 
-
-
   return (
-    <div className="post_container">
-      <Container
-        maxWidth="sm">
-        <h1> Create a new post</h1>
-        <Box
-          component="form"
-          noValidate
-          sx={{
-            display: 'grid',
-            gap: 5,
-          }}
-        >
-          <UserInput
-            label="User ID"
-            onChange={handleFormChange}
-            value={formData.userId}
-          >
-          </UserInput>
-          {/* <hr/> */}
-          <TitleInput
-            label="Title"
-            onChange={handleFormChange}
-            value={formData.title}
-          >
-          </TitleInput>
-          {/* <hr/> */}
-          <ContentInput
-            label="Content"
-            onChange={handleFormChange}
-            value={formData.body}
-          >
-          </ContentInput>
-
-          <SaveButton
-            onClick={postData}
-          />
-        </Box>
-      </Container>
-    </div>
+    <Container
+      maxWidth="sm" >
+      <h1> Create new post</h1>
+      <Box component="form" noValidate sx={{ display: 'grid', gap: 5, }} >
+        <UserInput label="User ID" onChange={handleFormChange} formData={formData} />
+        <TitleInput label="Title" onChange={handleFormChange} formData={formData} />
+        <ContentInput label="Content" onChange={handleFormChange} formData={formData} />
+        <SaveButton onClick={postData} setPost={setPost} validateData={validateData} formData={formData} clearForm={clearForm} setError={setError} />
+        <Button onClick={() => {
+          console.log('clearing')
+          clearForm()
+        }}>
+          clear
+        </Button>
+        {error.message && <AlertMessage error={error} setError={setError} />}
+      </Box>
+      {post.id && <Container>
+        <Paper elevation={1}>
+          <Post userId={post.userId} id={post.id} title={post.title} body={post.body} />
+        </Paper>
+      </Container>}
+    </Container >
   )
 }
 

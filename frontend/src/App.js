@@ -7,6 +7,7 @@ import { Routes, Route } from "react-router-dom";
 import { CreatePost } from './CreatePost/CreatePost'
 import { GetPost } from './GetPost/GetPost'
 import { MenuAppBar } from './MenuAppBar/MenuAppBar';
+import { AllPosts } from './AllPosts/AllPosts';
 
 import './App.css';
 
@@ -25,20 +26,13 @@ function App() {
       <CssBaseline />
       <MenuAppBar />
       <Routes>
-        <Route path="/" element={<Example />} />
+        <Route path="/" element={<AllPosts />} />
         <Route path="/create" element={<CreatePost />} />
         <Route path="/post" element={<GetPost />} />
         <Route path="/user-posts" />
       </Routes>
     </ThemeProvider>
   );
-}
-
-
-function Example() {
-  return (
-    <h3>Hello </h3>
-  )
 }
 
 

@@ -3,6 +3,8 @@ import React from 'react'
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
+import './styles.css';
+
 
 export function Post({ title, body, userId, id }) {
     //{ title, body, userId, id }
@@ -17,13 +19,18 @@ export function Post({ title, body, userId, id }) {
     return (
         <Container
             sx={{
-                margin: "1rem",
-                justifyContent: 'center'
-            }}>
+                padding: "1rem",
+                paddingRight: "3rem",
+                paddingLeft: "3rem",
+                // margin: "1rem",
+                justifyContent: 'center',
+                maxWidth: '90%'
+            }}
+        >
             <Typography variant='h3' gutterBottom> {title} </Typography>
-            <Typography variant="caption" display="inline" gutterBottom> userId: {userId} </Typography>
-            <Typography variant="caption" display="inline" gutterBottom> id: {id} </Typography>
+            <Typography variant="caption" gutterBottom> userId: {userId} </Typography>
+            <Typography variant="caption" gutterBottom> id: {id} </Typography>
             <Typography variant="body1"> {body} </Typography>
-        </Container>
+        </Container >
     )
 }

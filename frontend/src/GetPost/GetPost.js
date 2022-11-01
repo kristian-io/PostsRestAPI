@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 
-import Alert from '@mui/material/Alert';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
-import './styles.css'
 import { Post } from '../Post/Post';
+
+import './styles.css'
 
 const axios = require('axios').default;
 
@@ -83,11 +82,13 @@ export function GetPost() {
                         </Grid>
                     </Grid>
                 </form>
-                <Paper
-                    elevation={1} >
-                    {postData.id && <Post userId={postData.userId} id={postData.id} title={postData.title} body={postData.body} />}
-                </Paper>
-                {!postData.exists && <h3>Not found</h3>}
+                <Container>
+                    <Paper
+                        elevation={1} >
+                        {postData.id && <Post userId={postData.userId} id={postData.id} title={postData.title} body={postData.body} />}
+                    </Paper>
+                    {!postData.exists && <h3>Not found</h3>}
+                </Container>
             </Container>
         </>
     )
