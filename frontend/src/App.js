@@ -2,16 +2,13 @@ import React from 'react';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import Button from '@mui/material/Button';
+import { Routes, Route } from "react-router-dom";
 
-import { CreatePost } from './CreatePost'
+import { CreatePost } from './CreatePost/CreatePost'
 import { GetPost } from './GetPost/GetPost'
-// import { MenuAppBar } from './MenuAppBar/MenuAppBar'
-
-import { Routes, Route, Outlet, Link } from "react-router-dom";
+import { MenuAppBar } from './MenuAppBar/MenuAppBar';
 
 import './App.css';
-import { MenuAppBar } from './MenuAppBar/MenuAppBar';
 
 
 const darkTheme = createTheme({

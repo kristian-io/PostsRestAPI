@@ -1,1 +1,0 @@
-export { CreatePost } from './component.js'
