@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Unstable_Grid2';
 
 import { Post } from '../Post/Post'
 
@@ -22,10 +23,14 @@ function UserInput({ formData, label = null, onChange }) {
   return (
     <TextField
       required
+      fullWidth
       label={label}
       variant="outlined"
       value={formData.userId}
       name="userId"
+      sx={{
+        // maxWidth: "fit-content"
+      }}
       // helperText="User ID"
       onChange={onChange}
     />
@@ -70,6 +75,8 @@ function SaveButton({ onClick, validateData, clearForm, setError }) {
 
     <Button color="primary" variant="contained"
       sx={{
+        height: "100%",
+        minWidth: "100%",
         justifySelf: 'center'
       }}
 
@@ -77,6 +84,11 @@ function SaveButton({ onClick, validateData, clearForm, setError }) {
         if (validateData()) {
           onClick()
           clearForm()
+          setError({
+            message: "Post saved.",
+            severity: "success",
+            active: true
+          })
         }
         else {
           console.error('no data in the form')
@@ -139,7 +151,7 @@ export function CreatePost() {
   })
 
   function handleFormChange(event) {
-    console.log(event.target.name, event.target.value)
+    // console.log(event.target.name, event.target.value)
 
     setFormData({
       ...formData,
@@ -186,26 +198,38 @@ export function CreatePost() {
 
   return (
     <Container
-      maxWidth="sm" >
-      <h1> Create new post</h1>
-      <Box component="form" noValidate sx={{ display: 'grid', gap: 5, }} >
-        <UserInput label="User ID" onChange={handleFormChange} formData={formData} />
-        <TitleInput label="Title" onChange={handleFormChange} formData={formData} />
-        <ContentInput label="Content" onChange={handleFormChange} formData={formData} />
-        <SaveButton onClick={postData} setPost={setPost} validateData={validateData} formData={formData} clearForm={clearForm} setError={setError} />
-        <Button onClick={() => {
-          console.log('clearing')
-          clearForm()
-        }}>
-          clear
-        </Button>
-        {error.message && <AlertMessage error={error} setError={setError} />}
-      </Box>
-      {post.id && <Container>
-        <Paper elevation={1}>
-          <Post userId={post.userId} id={post.id} title={post.title} body={post.body} />
-        </Paper>
-      </Container>}
+      maxWidth="md" >
+      <Paper elevation={3} sx={{ margin: "1rem", padding: "1rem" }} >
+
+        <h1> Create new post</h1>
+        <Box component="form" noValidate sx={{ display: 'grid', gap: 5, }} >
+          <Grid container spacing={5} sx={{ justifyContent: "space-between" }}>
+            <Grid xs={8} >
+              <UserInput label="User ID" onChange={handleFormChange} formData={formData} />
+            </Grid>
+            <Grid xs={4} >
+              <SaveButton onClick={postData} setPost={setPost} validateData={validateData} formData={formData} clearForm={clearForm} setError={setError} />
+            </Grid>
+
+          </Grid>
+          <TitleInput label="Title" onChange={handleFormChange} formData={formData} />
+          <ContentInput label="Content" onChange={handleFormChange} formData={formData} />
+          {(formData.body || formData.title || formData.userId) && <Button onClick={() => {
+            console.log('clearing')
+            clearForm()
+          }}>
+            clear
+          </Button>}
+          <br />
+          {error.message && <AlertMessage error={error} setError={setError} />}
+          <br />
+        </Box>
+        {post.id && <Container>
+          <Paper elevation={1}>
+            <Post userId={post.userId} id={post.id} title={post.title} body={post.body} />
+          </Paper>
+        </Container>}
+      </Paper >
     </Container >
   )
 }

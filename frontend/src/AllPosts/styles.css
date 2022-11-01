@@ -3,11 +3,18 @@ ul {
     padding: 0px;
 }
 
-/* .postPaper {
-    border: solid palevioletred;
-} */
+
+.postPaper {
+    border: 0.2px solid navy;
+    border-radius: 10px;
+    /* opacity: 90%; */
+}
 
 
 .postPaper:hover {
+    border: 0.2px solid purple;
+    border-radius: 10px;
     background-color: rgb(41, 60, 77);
+    /* background-size: 103%; */
+    /* opacity: 110%; */
 }
