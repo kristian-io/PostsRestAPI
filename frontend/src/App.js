@@ -11,6 +11,7 @@ import { GetPost } from './GetPost/GetPost'
 import { Routes, Route, Outlet, Link } from "react-router-dom";
 
 import './App.css';
+import { MenuAppBar } from './MenuAppBar/MenuAppBar';
 
 
 const darkTheme = createTheme({
@@ -25,23 +26,13 @@ function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
+      <MenuAppBar />
       <Routes>
-        <Route path="/" element={<App />}>
-          Home
-        </Route>
-        <Route path="/createPost" element={<Example />}>
-          Create Post
-        </Route>
-        <Route path="/getPost" element={<Example />}>
-          <Button>Get Post</Button>
-        </Route>
-        <Route path="/getUserPosts">
-          <Button>Get Post by User</Button>
-        </Route>
+        <Route path="/" element={<Example />} />
+        <Route path="/create" element={<CreatePost />} />
+        <Route path="/post" element={<GetPost />} />
+        <Route path="/user-posts" />
       </Routes>
-
-      <hr />
-      <Outlet />
     </ThemeProvider>
   );
 }

@@ -57,7 +57,7 @@ export function GetPost() {
 
     return (
         <>
-            <Container maxWidth="sm">
+            <Container maxWidth="sm" sx={{ padding: '20px' }}>
                 {/* <h2>Get post by ID</h2> */}
                 <form name="getPostForm" onSubmit={handleSubmit}>
                     <Grid container justify="space-between" alignItems="center" spacing={1}>
