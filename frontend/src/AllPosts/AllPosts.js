@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/system/Container';
 
 import { Post } from '../Post/Post';
+import { BodyContainer } from '../BodyContainer/BodyContainer';
 
 import './styles.css'
 
@@ -38,7 +39,7 @@ export function AllPosts() {
 
 
     const postList = posts.map((post) =>
-        <Grid xs={12} sm={8} md={8} key={post.id} >
+        <Grid xs={12} sm={10} md={10} key={post.id} >
             <Container>
                 <Paper className="postPaper" elevation={1} >
                     <Post userId={post.userId} id={post.id} title={post.title} body={post.body} />
@@ -48,18 +49,17 @@ export function AllPosts() {
     );
 
     return (
-        <Container sx={{ paddingTop: "1rem" }}>
+        <BodyContainer >
             {loading &&
                 <Box sx={{ width: '100%' }}>
                     <LinearProgress />
                     <h3>Loading...</h3>
                 </Box>}
             <Grid container spacing={3} sx={{
-                justifyContent: "center",
-                paddingTop: "1rem"
+                justifyContent: "center"
             }}>
                 {postList.reverse()}
             </Grid >
-        </Container>
+        </BodyContainer>
     )
 }

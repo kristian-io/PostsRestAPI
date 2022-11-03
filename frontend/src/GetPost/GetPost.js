@@ -4,9 +4,13 @@ import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Unstable_Grid2';
+import Box from '@mui/material/Box'
+
 
 import { Post } from '../Post/Post';
+import { BodyContainer } from '../BodyContainer/BodyContainer';
+
 
 import './styles.css'
 
@@ -29,7 +33,7 @@ export function GetPost() {
 
     const [postID, setPostID] = useState('');
 
-    function onChange(event) {
+    function handleChange(event) {
         console.log(event.target.value)
         setPostID(event.target.value)
     }
@@ -55,41 +59,25 @@ export function GetPost() {
     }
 
     return (
-        <>
-            <Container maxWidth="sm" sx={{ padding: '20px' }}>
-                {/* <h2>Get post by ID</h2> */}
-                <form name="getPostForm" onSubmit={handleSubmit}>
-                    <Grid container justify="space-between" alignItems="center" spacing={1}>
-                        <Grid item xs={6} >
-                            <TextField
-                                variant="outlined"
-                                onChange={onChange}
-                                name="getPost"
-                                value={postID}
-                                // id="standard-basic" 
-                                label="Get Post by ID"
-                            />
+        <BodyContainer>
+            <Paper elevation={3} sx={{ padding: "2rem 0rem" }}>
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'grid', gap: 5, }} >
+                    <Grid container spacing={5} sx={{ justifyContent: "center" }}>
+                        <Grid xs={4} >
+                            <TextField variant="outlined" fullWidth onChange={handleChange} value={postID} label="Get Post by ID" ></TextField>
                         </Grid>
-                        <Grid item xs={6} >
-                            <Button
-                                size="large"
-                                variant="contained"
-                                sx={{
-                                    justifySelf: 'center'
-                                }}
-                                onClick={handleSubmit}> Get
-                            </Button>
+                        <Grid xs={4} >
+                            <Button variant="outlined" onClick={handleSubmit} size="large" sx={{ height: "100%", minWidth: "100%", justifySelf: 'center' }}> Get </Button>
                         </Grid>
                     </Grid>
-                </form>
-                <Container>
-                    <Paper
-                        elevation={1} >
-                        {postData.id && <Post userId={postData.userId} id={postData.id} title={postData.title} body={postData.body} />}
-                    </Paper>
-                    {!postData.exists && <h3>Not found</h3>}
-                </Container>
-            </Container>
-        </>
+                </Box>
+            </Paper>
+            {postData.id &&
+                <Paper sx={{ padding: "2rem 0rem", marginTop: "2rem" }} elevation={3} >
+                    <Post userId={postData.userId} id={postData.id} title={postData.title} body={postData.body} />
+                </Paper>}
+            {!postData.exists && <h4>Not found</h4>}
+
+        </BodyContainer>
     )
 }

@@ -9,9 +9,10 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import { Post } from '../Post/Post'
+import { BodyContainer } from '../BodyContainer/BodyContainer';
+import { Collapse } from '@mui/material';
 
 import './styles.css'
-import { Collapse } from '@mui/material';
 
 const axios = require('axios').default;
 
@@ -197,10 +198,8 @@ export function CreatePost() {
   };
 
   return (
-    <Container
-      maxWidth="md" >
-      <Paper elevation={3} sx={{ margin: "1rem", padding: "1rem" }} >
-
+    <BodyContainer>
+      <Paper elevation={3} >
         <h1> Create new post</h1>
         <Box component="form" noValidate sx={{ display: 'grid', gap: 5, }} >
           <Grid container spacing={5} sx={{ justifyContent: "space-between" }}>
@@ -230,7 +229,7 @@ export function CreatePost() {
           </Paper>
         </Container>}
       </Paper >
-    </Container >
+    </BodyContainer >
   )
 }
 
