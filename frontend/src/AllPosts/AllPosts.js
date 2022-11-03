@@ -11,7 +11,8 @@ import { BodyContainer } from '../BodyContainer/BodyContainer';
 
 import './styles.css'
 
-const axios = require('axios').default;
+// const axios = require('axios').default;
+import axios from 'axios'
 
 // TODO: move this away
 const API_ENDPOINT = 'http://127.0.0.1:8000/api/v1/posts';
@@ -52,9 +53,10 @@ export function AllPosts() {
         <BodyContainer >
             {loading &&
                 <Box sx={{ width: '100%' }}>
-                    <LinearProgress />
+                    <LinearProgress color="inherit" />
                     <h3>Loading...</h3>
-                </Box>}
+                </Box>
+            }
             <Grid container spacing={3} sx={{
                 justifyContent: "center"
             }}>
