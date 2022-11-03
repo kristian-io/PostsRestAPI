@@ -4,8 +4,11 @@
 
 
 :root {
-  --g1: rgb(35, 71, 123);
-  --g2: rgb(4, 22, 47);
+  /* --g1: rgb(35, 71, 123);
+  --g2: rgb(4, 22, 47); */
+
+  --g1: rgb(23, 0, 33);
+  --g2: rgb(79, 2, 54);
 }
 
 @keyframes background-pan {
@@ -19,7 +22,7 @@
 }
 
 body {
-  animation: background-pan 10s linear infinite;
+  animation: background-pan 5s linear infinite;
   background: linear-gradient(to left,
       var(--g1),
       var(--g2),

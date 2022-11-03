@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 
 import { Link } from "react-router-dom";
 
+import './styles.css'
 
 export function MenuAppBar() {
   return (
@@ -16,28 +17,27 @@ export function MenuAppBar() {
           gap: "10%"
         }}>
           {/* <ButtonGroup fullWidth variant="text" size="small" aria-label="text button group "> */}
-          <Link to="/">
+          <Link to="/" >
             <Button>
               home
             </Button>
           </Link>
-          <Link to="/create">
+          <Link to="/create" >
             <Button>
               create
             </Button>
           </Link>
 
-          <Link to="/post" >
+          <Link to="/post"  >
             <Button>
               show post
             </Button>
           </Link>
-          <Link to="/user-posts" >
+          <Link to="/user-posts">
             <Button>
-              posts by user
+              user posts
             </Button>
           </Link>
-
           {/* </ButtonGroup> */}
         </Toolbar>
       </AppBar>

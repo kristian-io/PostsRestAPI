@@ -199,8 +199,9 @@ export function CreatePost() {
 
   return (
     <BodyContainer>
-      <Paper elevation={3} >
+      <Paper elevation={3} sx={{ padding: "3rem 1rem" }}>
         <h1> Create new post</h1>
+        <br />
         <Box component="form" noValidate sx={{ display: 'grid', gap: 5, }} >
           <Grid container spacing={5} sx={{ justifyContent: "space-between" }}>
             <Grid xs={8} >
@@ -209,7 +210,6 @@ export function CreatePost() {
             <Grid xs={4} >
               <SaveButton onClick={postData} setPost={setPost} validateData={validateData} formData={formData} clearForm={clearForm} setError={setError} />
             </Grid>
-
           </Grid>
           <TitleInput label="Title" onChange={handleFormChange} formData={formData} />
           <ContentInput label="Content" onChange={handleFormChange} formData={formData} />

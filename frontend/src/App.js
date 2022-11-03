@@ -8,6 +8,7 @@ import { CreatePost } from './CreatePost/CreatePost'
 import { GetPost } from './GetPost/GetPost'
 import { MenuAppBar } from './MenuAppBar/MenuAppBar';
 import { AllPosts } from './AllPosts/AllPosts';
+import { UserPosts } from './UserPosts/UserPosts'
 
 import './App.css';
 
@@ -29,7 +30,7 @@ function App() {
         <Route path="/" element={<AllPosts />} />
         <Route path="/create" element={<CreatePost />} />
         <Route path="/post" element={<GetPost />} />
-        <Route path="/user-posts" />
+        <Route path="/user-posts" element={<UserPosts />} />
       </Routes>
     </ThemeProvider>
   );
