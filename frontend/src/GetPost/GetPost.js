@@ -86,7 +86,7 @@ export function GetPost() {
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'grid', gap: 5, }} >
                     <Grid container spacing={5} sx={{ justifyContent: "center" }}>
                         <Grid xs={4} >
-                            <TextField variant="outlined" fullWidth onChange={handleChange} value={postID} label="Get Post by ID" ></TextField>
+                            <TextField variant="outlined" fullWidth onChange={handleChange} value={postID} label="Post ID" ></TextField>
                         </Grid>
                         <Grid xs={4} >
                             <Button variant="outlined" onClick={handleSubmit} size="large" sx={{ height: "100%", minWidth: "100%", justifySelf: 'center' }}> Get </Button>
