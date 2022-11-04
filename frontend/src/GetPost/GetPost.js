@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import Container from '@mui/material/Container';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
@@ -33,18 +35,25 @@ export function GetPost() {
     })
 
     const [postID, setPostID] = useState('');
+    const { id } = useParams()
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (id) {
+            setPostID(id)
+            getPost(id)
+        }
+    }, [id])
+
 
     function handleChange(event) {
-        console.log(event.target.value)
+        // console.log(event.target.value)
         setPostID(event.target.value)
     }
 
-    function handleSubmit(event) {
-        console.log(event)
-        event.preventDefault()
 
-        const id = postID
-
+    function getPost(id) {
         axios.get(`${API_ENDPOINT}/${id}`)
             .then((response) => {
                 console.log(response.data)
@@ -57,6 +66,14 @@ export function GetPost() {
                     ...postData, exists: false, id: null
                 })
             })
+    }
+
+    function handleSubmit(event) {
+        console.log(event)
+        event.preventDefault()
+        // navigate the the url and useEffect will handle the rest
+        navigate(`/post/${postID}`);
+
     }
 
     return (

@@ -30,7 +30,9 @@ function App() {
         <Route path="/" element={<AllPosts />} />
         <Route path="/create" element={<CreatePost />} />
         <Route path="/post" element={<GetPost />} />
+        <Route path="/post/:id" element={<GetPost />} />
         <Route path="/user-posts" element={<UserPosts />} />
+        <Route path="*" />
       </Routes>
     </ThemeProvider>
   );

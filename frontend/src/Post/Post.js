@@ -1,9 +1,11 @@
 import React from 'react'
 
+
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
 import './styles.css';
+
 
 
 export function Post({ title, body, userId, id }) {
@@ -14,7 +16,6 @@ export function Post({ title, body, userId, id }) {
     // Sint voluptate tempor ipsum nulla eiusmod cupidatat laborum id tempor magna ex cupidatat quis. In quis quis dolore adipisicing sit. In deserunt pariatur duis enim reprehenderit labore. Ad excepteur pariatur do tempor ullamco culpa exercitation ipsum consequat do id esse ex.";
     //     const userId = "1" 
     //     const id = "15" 
-
 
     return (
         <Container

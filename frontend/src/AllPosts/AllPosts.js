@@ -34,8 +34,6 @@ export function AllPosts() {
                 console.error(error)
             })
 
-
-
     }, [])
 
 
