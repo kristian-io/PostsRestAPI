@@ -18,7 +18,7 @@ import '../AllPosts/styles.css'
 
 import { useNavigate, useParams } from 'react-router-dom';
 
-const axios = require('axios').default;
+import axios from 'axios';
 
 // TODO: move this away
 const API_ENDPOINT = 'http://127.0.0.1:8000/api/v1/posts/user';
