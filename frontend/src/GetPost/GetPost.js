@@ -44,6 +44,10 @@ export function GetPost() {
             setPostID(id)
             getPost(id)
         }
+        else {
+            setPostID('')
+            setPostData({ ...postData, id: null })
+        }
     }, [id])
 
 
