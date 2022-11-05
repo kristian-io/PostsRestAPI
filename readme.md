@@ -49,6 +49,19 @@ These endpoints are also browser accessible to interact with (when the server is
 - **GET** [`/api/v1/posts/user/{userId}`](http://127.0.0.1:8000/api/v1/posts/user/{userId})
 
 
+## Frontend
+
+Written with React and MUI.
+### Setup
+
+```
+cd frontend
+npm install
+npm start
+```
+
+open [`http://localhost:3000`](http://localhost:3000)
+
 # Todo/Backlog
 
 - Fix docs for POST endpoint (currently does not allow POSTing data (schema issues))
