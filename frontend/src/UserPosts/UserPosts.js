@@ -65,11 +65,28 @@ export function UserPosts() {
             .catch((error) => {
                 console.error(error)
                 setPosts([])
-                setAlert({
-                    message: `Unable to get user's posts, error: ${error.code}`,
-                    severity: "error",
-                    active: true
-                })
+                if (error.code === "ERR_NETWORK") {
+                    setAlert({
+                        message: `Unable to communicate with backed. Server is down or you have internet connection problem.  `,
+                        severity: "error",
+                        active: true
+                    })
+
+                }
+                else if (error.response.status === 404) {
+                    setAlert({
+                        message: `User's post not found`,
+                        severity: "error",
+                        active: true
+                    })
+                }
+                else {
+                    setAlert({
+                        message: `Unknown error occurred ${error}`,
+                        severity: "error",
+                        active: true
+                    })
+                }
             })
     }
 

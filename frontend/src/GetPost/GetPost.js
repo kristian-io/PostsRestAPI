@@ -38,7 +38,7 @@ export function GetPost() {
         active: false
     })
 
-    const getPost = useCallback(() => {
+    const getPost = useCallback((id) => {
         axios.get(`${API_ENDPOINT}/${id}`)
             .then((response) => {
                 console.log(response.data)
@@ -52,21 +52,38 @@ export function GetPost() {
                 console.log(error)
                 setPostData(postData => {
                     return {
-                        ...postData, exists: false, id: null
+                        ...postData, exists: true, id: null
                     }
                 })
-                setAlert({
-                    message: `Unable to get post, error: ${error.response.status} `,
-                    severity: "error",
-                    active: true
-                })
+                if (error.code === "ERR_NETWORK") {
+                    setAlert({
+                        message: `Unable to communicate with backed. Server is down or you have internet connection problem.  `,
+                        severity: "error",
+                        active: true
+                    })
 
+                }
+                else if (error.response.status === 404) {
+                    setAlert({
+                        message: `Post not found`,
+                        severity: "error",
+                        active: true
+                    })
+                }
+                else {
+                    setAlert({
+                        message: `Unknown error occurred ${error}`,
+                        severity: "error",
+                        active: true
+                    })
+                }
             })
     }, [id])
 
     const navigate = useNavigate();
 
     useEffect(() => {
+        console.log("useEffect runs")
         if (id) {
             console.log(id)
             setPostID(id)
@@ -77,7 +94,7 @@ export function GetPost() {
             setPostID("")
             setPostData(postData => { return { ...postData, id: null } })
         }
-    }, [id, getPost])
+    }, [id])
 
 
     function handleChange(event) {
@@ -103,7 +120,8 @@ export function GetPost() {
         }
         // navigate the the url and useEffect will handle the rest
         else {
-            setAlert({ ...alert, active: false })
+            // setAlert({ ...alert, active: false })
+
             navigate(`/post/${postID}`);
         }
 
@@ -127,7 +145,6 @@ export function GetPost() {
                 <Paper sx={{ padding: "2rem 0rem", marginTop: "2rem" }} elevation={3} >
                     <Post userId={postData.userId} id={postData.id} title={postData.title} body={postData.body} />
                 </Paper>}
-            {!postData.exists && <h4>Not found</h4>}
             {alert.active &&
                 <AlertMessage alert={alert} setAlert={setAlert} />}
 
