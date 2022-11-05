@@ -7,16 +7,15 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container';
 
-
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Post } from '../Post/Post';
 import { BodyContainer } from '../BodyContainer/BodyContainer';
-
+import { AlertMessage } from '../AlertMessage/AlertMessage';
 
 import './styles.css'
 import '../AllPosts/styles.css'
 
-import { useNavigate, useParams } from 'react-router-dom';
 
 import axios from 'axios';
 
@@ -24,12 +23,17 @@ import axios from 'axios';
 const API_ENDPOINT = 'http://127.0.0.1:8000/api/v1/posts/user';
 
 
-
 export function UserPosts() {
     const [posts, setPosts] = useState([]);
 
     const [userID, setUserID] = useState("");
     const { id } = useParams()
+
+    const [alert, setAlert] = useState({
+        message: "",
+        severity: "",
+        active: false
+    })
 
     const navigate = useNavigate();
 
@@ -40,7 +44,8 @@ export function UserPosts() {
         }
         else {
             setUserID("");
-            getPosts(id)
+            // getPosts(id)
+            setPosts([])
         }
     }, [id])
 
@@ -54,19 +59,37 @@ export function UserPosts() {
     function getPosts(id) {
         axios.get(`${API_ENDPOINT}/${id}`)
             .then((response) => {
-                console.log(response.data)
+                // console.log(response.data)
                 setPosts(response.data)
             })
             .catch((error) => {
                 console.error(error)
+                setPosts([])
+                setAlert({
+                    message: `Unable to get user's posts, error: ${error.code}`,
+                    severity: "error",
+                    active: true
+                })
             })
     }
 
     function handleSubmit(event) {
-        console.log(event)
+        // console.log(event)
         event.preventDefault()
-        // navigate the the url and useEffect will handle the rest
-        navigate(`/user-posts/${userID}`);
+        if (userID === "") {
+            setAlert({
+                message: "User ID is required",
+                severity: "error",
+                active: true
+            })
+            navigate(`/user-posts`);
+        }
+        else {
+            // navigate the the url and useEffect will handle the rest
+            setAlert({ ...alert, active: false })
+            navigate(`/user-posts/${userID}`);
+
+        }
     }
 
 
@@ -88,7 +111,7 @@ export function UserPosts() {
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'grid', gap: 5, }} >
                     <Grid container spacing={5} sx={{ justifyContent: "center" }}>
                         <Grid xs={4} >
-                            <TextField variant="outlined" fullWidth onChange={handleChange} value={userID} label="User ID" ></TextField>
+                            <TextField required variant="outlined" fullWidth onChange={handleChange} value={userID} label="User ID" ></TextField>
                         </Grid>
                         <Grid xs={4} >
                             <Button variant="outlined" onClick={handleSubmit} size="large" sx={{ height: "100%", minWidth: "100%", justifySelf: 'center' }}> Get </Button>
@@ -96,6 +119,8 @@ export function UserPosts() {
                     </Grid>
                 </Box>
             </Paper>
+            {alert.active &&
+                <AlertMessage alert={alert} setAlert={setAlert} />}
 
             {posts &&
                 <Grid container spacing={3} sx={{

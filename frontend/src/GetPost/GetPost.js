@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { useParams } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from 'react-router-dom';
 
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
@@ -9,10 +8,9 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
 import Box from '@mui/material/Box'
 
-
 import { Post } from '../Post/Post';
 import { BodyContainer } from '../BodyContainer/BodyContainer';
-
+import { AlertMessage } from '../AlertMessage/AlertMessage';
 
 import './styles.css'
 
@@ -21,8 +19,6 @@ import axios from 'axios'
 
 // TODO: move this away
 const API_ENDPOINT = 'http://127.0.0.1:8000/api/v1/posts';
-
-
 
 
 export function GetPost() {
@@ -34,18 +30,26 @@ export function GetPost() {
         exists: true
     })
 
-    const [postID, setPostID] = useState('');
+    const [postID, setPostID] = useState("");
     const { id } = useParams()
+    const [alert, setAlert] = useState({
+        message: "",
+        severity: "",
+        active: false
+    })
+
 
     const navigate = useNavigate();
 
     useEffect(() => {
         if (id) {
+            console.log(id)
             setPostID(id)
             getPost(id)
         }
         else {
-            setPostID('')
+            console.log(id)
+            setPostID("")
             setPostData({ ...postData, id: null })
         }
     }, [id])
@@ -66,17 +70,37 @@ export function GetPost() {
                 })
             })
             .catch((error) => {
+                console.log(error)
                 setPostData({
                     ...postData, exists: false, id: null
                 })
+                setAlert({
+                    message: `Unable to get post, error: ${error.code} `,
+                    severity: "error",
+                    active: true
+                })
+
             })
     }
 
     function handleSubmit(event) {
         console.log(event)
         event.preventDefault()
+        if (postID === "") {
+            console.log("imput is empty!!!!")
+            setAlert({
+                message: "Post ID is required",
+                severity: "error",
+                active: true
+            })
+            navigate(`/post`);
+
+        }
         // navigate the the url and useEffect will handle the rest
-        navigate(`/post/${postID}`);
+        else {
+            setAlert({ ...alert, active: false })
+            navigate(`/post/${postID}`);
+        }
 
     }
 
@@ -86,7 +110,7 @@ export function GetPost() {
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'grid', gap: 5, }} >
                     <Grid container spacing={5} sx={{ justifyContent: "center" }}>
                         <Grid xs={4} >
-                            <TextField variant="outlined" fullWidth onChange={handleChange} value={postID} label="Post ID" ></TextField>
+                            <TextField required variant="outlined" fullWidth onChange={handleChange} value={postID} label="Post ID" ></TextField>
                         </Grid>
                         <Grid xs={4} >
                             <Button variant="outlined" onClick={handleSubmit} size="large" sx={{ height: "100%", minWidth: "100%", justifySelf: 'center' }}> Get </Button>
@@ -99,7 +123,9 @@ export function GetPost() {
                     <Post userId={postData.userId} id={postData.id} title={postData.title} body={postData.body} />
                 </Paper>}
             {!postData.exists && <h4>Not found</h4>}
+            {alert.active &&
+                <AlertMessage alert={alert} setAlert={setAlert} />}
 
-        </BodyContainer>
+        </BodyContainer >
     )
 }

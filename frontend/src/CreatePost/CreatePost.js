@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import Alert from '@mui/material/Alert';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -10,7 +9,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 
 import { Post } from '../Post/Post'
 import { BodyContainer } from '../BodyContainer/BodyContainer';
-import { Collapse } from '@mui/material';
+import { AlertMessage } from '../AlertMessage/AlertMessage';
 
 import './styles.css'
 
@@ -71,8 +70,27 @@ function ContentInput({ formData, label = null, onChange }) {
   )
 }
 
-function SaveButton({ onClick, validateData, clearForm, setError }) {
+function SaveButton({ onClick, validateData, clearForm, setAlert }) {
+  function handleClick() {
+    if (validateData()) {
+      onClick()
+      clearForm()
+      setAlert({
+        message: "Post saved.",
+        severity: "success",
+        active: true
+      })
+    }
+    else {
+      console.error('no data in the form')
+      setAlert({
+        message: "All fields are required!",
+        severity: "error",
+        active: true
+      })
+    }
 
+  }
   return (
 
     <Button color="primary" variant="contained"
@@ -81,61 +99,13 @@ function SaveButton({ onClick, validateData, clearForm, setError }) {
         minWidth: "100%",
         justifySelf: 'center'
       }}
-
-      onClick={() => {
-        if (validateData()) {
-          onClick()
-          clearForm()
-          setError({
-            message: "Post saved.",
-            severity: "success",
-            active: true
-          })
-        }
-        else {
-          console.error('no data in the form')
-          setError({
-            message: "All fields are required!",
-            severity: "error",
-            active: true
-          })
-        }
-      }}>
+      onClick={handleClick}>
       Save
-    </Button>
+    </ Button >
 
   )
 }
 
-function AlertMessage({ error }) {
-
-  const [open, setOpen] = React.useState(true);
-
-  useEffect(() => {
-    if (error.active) {
-      setOpen(true)
-    }
-    else {
-      setOpen(false)
-    }
-  }, [error])
-
-  return (
-    <Collapse in={open} >
-      <Alert
-        severity={error.severity}
-        onClose={() => {
-          console.log("clicked")
-          setOpen(!open)
-        }}
-        onClick={() => {
-          setOpen(!open)
-        }}>
-        {error.message}
-      </Alert>
-    </Collapse >
-  )
-}
 
 export function CreatePost() {
   const [formData, setFormData] = useState({
@@ -147,9 +117,10 @@ export function CreatePost() {
   const [post, setPost] = useState({
   })
 
-  const [error, setError] = useState({
+  const [alert, setAlert] = useState({
     message: "",
-    status: null
+    severity: "",
+    active: false
   })
 
   function handleFormChange(event) {
@@ -190,8 +161,8 @@ export function CreatePost() {
           body: ''
         })
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((alert) => {
+        console.log(alert);
       })
       .finally(() => {
         console.log('done...');
@@ -209,7 +180,7 @@ export function CreatePost() {
               <UserInput label="User ID" onChange={handleFormChange} formData={formData} />
             </Grid>
             <Grid xs={4} >
-              <SaveButton onClick={postData} setPost={setPost} validateData={validateData} formData={formData} clearForm={clearForm} setError={setError} />
+              <SaveButton onClick={postData} setPost={setPost} validateData={validateData} formData={formData} clearForm={clearForm} setAlert={setAlert} />
             </Grid>
           </Grid>
           <TitleInput label="Title" onChange={handleFormChange} formData={formData} />
@@ -221,7 +192,7 @@ export function CreatePost() {
             clear
           </Button>}
           <br />
-          {error.message && <AlertMessage error={error} setError={setError} />}
+          {alert.message && <AlertMessage alert={alert} setAlert={setAlert} />}
           <br />
         </Box>
         {post.id && <Container>
