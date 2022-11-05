@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -38,6 +38,31 @@ export function GetPost() {
         active: false
     })
 
+    const getPost = useCallback(() => {
+        axios.get(`${API_ENDPOINT}/${id}`)
+            .then((response) => {
+                console.log(response.data)
+                setPostData(postData => {
+                    return {
+                        ...postData, ...response.data, exists: true
+                    }
+                })
+            })
+            .catch((error) => {
+                console.log(error)
+                setPostData(postData => {
+                    return {
+                        ...postData, exists: false, id: null
+                    }
+                })
+                setAlert({
+                    message: `Unable to get post, error: ${error.response.status} `,
+                    severity: "error",
+                    active: true
+                })
+
+            })
+    }, [id])
 
     const navigate = useNavigate();
 
@@ -50,9 +75,9 @@ export function GetPost() {
         else {
             console.log(id)
             setPostID("")
-            setPostData({ ...postData, id: null })
+            setPostData(postData => { return { ...postData, id: null } })
         }
-    }, [id])
+    }, [id, getPost])
 
 
     function handleChange(event) {
@@ -61,27 +86,7 @@ export function GetPost() {
     }
 
 
-    function getPost(id) {
-        axios.get(`${API_ENDPOINT}/${id}`)
-            .then((response) => {
-                console.log(response.data)
-                setPostData({
-                    ...postData, ...response.data, exists: true
-                })
-            })
-            .catch((error) => {
-                console.log(error)
-                setPostData({
-                    ...postData, exists: false, id: null
-                })
-                setAlert({
-                    message: `Unable to get post, error: ${error.code} `,
-                    severity: "error",
-                    active: true
-                })
 
-            })
-    }
 
     function handleSubmit(event) {
         console.log(event)
