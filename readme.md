@@ -6,26 +6,45 @@ Implemented with Django and django-rest-framework.
 
 # Installation
 
+## Docker
+`docker compose up -d` 
+
+## Manual setup 
+
+## Backend
 ```
 git clone https://github.com/kristian-io/PostsRestAPI.git
 cd PostsRestAPI
 conda create --name post-api python=3.10 -y
 conda activate post-api
 pip install -r requirements.txt
-cd posts_rest_api
+cd backend
 
 python manage.py migrate
 ```
 
 We can first run some tests
-```python manage.py test```
+`python manage.py test`
 
-Then
-```python manage.py runserver```
+Then run the server
+`python manage.py runserver`
 
 Development server will be served at:
 [`http://127.0.0.1:8000/`](http://127.0.0.1:8000/) which will redirect you to the documentation.
 
+
+## Frontend
+
+Written with React and MUI.
+
+
+```
+cd frontend
+npm install
+npm start
+```
+
+Open [`http://localhost:3000`](http://localhost:3000)
 
 # Documentation 
 
@@ -49,22 +68,9 @@ These endpoints are also browser accessible to interact with (when the server is
 - **GET** [`/api/v1/posts/user/{userId}`](http://127.0.0.1:8000/api/v1/posts/user/{userId})
 
 
-## Frontend
 
-Written with React and MUI.
-### Setup
-
-```
-cd frontend
-npm install
-npm start
-```
-
-open [`http://localhost:3000`](http://localhost:3000)
 
 # Todo/Backlog
 
 - Fix docs for POST endpoint (currently does not allow POSTing data (schema issues))
-- Implement frontend to interact with the API
-- Docker container
 - Prod server setup
