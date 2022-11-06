@@ -1,3 +1,5 @@
+.pytest_cache
+db.sqlite3
 __pycache__/
 .vscode/
 backend/db.sqlite3
