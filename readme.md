@@ -1,5 +1,5 @@
-# POSTS REST API [![Scc Count Badge](https://sloc.xyz/github/kristian-io/PostsRestAPI/?category=code)](https://github.com/kristian-io/PostsRestAPI/) 
-
+# POSTS REST API 
+<!-- [![Scc Count Badge](https://sloc.xyz/github/kristian-io/PostsRestAPI/?category=code)](https://github.com/kristian-io/PostsRestAPI/)  -->
 Restful API in Python which handles basic CRUD operations for managing user "posts".
 
 Implemented with Django and django-rest-framework.
@@ -8,6 +8,9 @@ Implemented with Django and django-rest-framework.
 
 ## Docker
 `docker compose up -d` 
+
+- Frontend [`http://localhost:3000`](http://localhost:3000)
+- Backend [`http://localhost:8000`](http://localhost:8000)
 
 ## Manual setup 
 
@@ -30,17 +33,17 @@ Then run the server
 `python manage.py runserver`
 
 Development server will be served at:
-[`http://127.0.0.1:8000/`](http://127.0.0.1:8000/) which will redirect you to the documentation.
+[`http://localhost:8000/`](http://localhost:8000/) which will redirect you to the documentation.
 
 
 ## Frontend
 
-Written with React and MUI.
+Written in JS with React and MUI.
 
 
 ```
 cd frontend
-npm install
+npm ci
 npm start
 ```
 
@@ -72,5 +75,5 @@ These endpoints are also browser accessible to interact with (when the server is
 
 # Todo/Backlog
 
-- Fix docs for POST endpoint (currently does not allow POSTing data (schema issues))
+- Fix docs (POST)
 - Prod server setup
